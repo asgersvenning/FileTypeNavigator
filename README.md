@@ -2,7 +2,7 @@
 
 Relative Path Navigation is a small VSCode extension which allow you to open files in the directory relative to the current open file. This is useful if you are working in a file and want to view files next to it. Eg. when jumping between style and implementation file in a component based project.
 
-![Directory Files](https://github.com/DaniloPeres/relative-path-navigation/raw/master/resources/quick-demo.gif)
+![Directory Files](https://raw.githubusercontent.com/DaniloPeres/relative-path-navigation/main/resources/quick-demo.gif)
 
 ## Features
 
