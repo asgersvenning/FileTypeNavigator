@@ -1,0 +1,73 @@
+{
+  "name": "relative-path-navigation",
+  "displayName": "Relative Path Navigation",
+  "description": "Quick navigation between the files in the directory relative to the current open file",
+  "icon": "resources/logo.png",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.69.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:relative-path-navigation.showFilesInRelativePath",
+    "onCommand:relative-path-navigation.openNextFileInRelativePath",
+    "onCommand:relative-path-navigation.openPreviousFileInRelativePath"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "relative-path-navigation.showFilesInRelativePath",
+        "title": "Show Files in relative path"
+      },
+      {
+        "command": "relative-path-navigation.openNextFileInRelativePath",
+        "title": "Open next file in relative path"
+      },
+      {
+        "command": "relative-path-navigation.openPreviousFileInRelativePath",
+        "title": "Open previous file in relative path"
+      }
+    ],
+	"keybindings": [
+		{
+			"command": "relative-path-navigation.showFilesInRelativePath",
+			"key": "ctrl+e",
+			"when": "editorTextFocus"
+		},
+		{
+			"command": "relative-path-navigation.openNextFileInRelativePath",
+			"key": "ctrl+[ArrowDown]",
+			"when": "editorTextFocus"
+		},
+		{
+			"command": "relative-path-navigation.openPreviousFileInRelativePath",
+			"key": "ctrl+[ArrowUp]",
+			"when": "editorTextFocus"
+		}
+	]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.69.0",
+    "@types/glob": "^7.2.0",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "16.x",
+    "@typescript-eslint/eslint-plugin": "^5.30.0",
+    "@typescript-eslint/parser": "^5.30.0",
+    "eslint": "^8.18.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.0.0",
+    "typescript": "^4.7.4",
+    "@vscode/test-electron": "^2.1.5"
+  }
+}
