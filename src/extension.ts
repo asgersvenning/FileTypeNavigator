@@ -81,13 +81,28 @@ async function openPreviousFileInRelativePath() {
 	openFile(files[fileIndex]);
 }
 
-function getActiveFilePath() {
-  if (!vscode.window.activeTextEditor) {
-    vscode.window.showWarningMessage("No active editor.");
-    return "";
+async function getActiveFilePath() {
+  // Save the original clipboard content to restore later
+  const originalClipboardContent = await vscode.env.clipboard.readText();
+
+  // Execute the command that copies the path of the active file to the clipboard
+  await vscode.commands.executeCommand('workbench.action.files.copyPathOfActiveFile');
+
+  // Retrieve the copied path from the clipboard
+  const copiedPath = await vscode.env.clipboard.readText();
+
+  // Restore the original clipboard content
+  await vscode.env.clipboard.writeText(originalClipboardContent);
+
+  // Check if the path was successfully retrieved
+  if (!copiedPath) {
+      vscode.window.showWarningMessage("Failed to retrieve the file path.");
+      return "";
   }
-  return vscode.window.activeTextEditor.document.uri.fsPath;
+  
+  return copiedPath;
 }
+
 
 function getActiveFileName() {
   if (!vscode.window.activeTextEditor) {
@@ -97,16 +112,17 @@ function getActiveFileName() {
   return vscode.window.activeTextEditor.document.fileName.replace(/\\/g, "/").split("/").at(-1);
 }
 
-function getActiveParentFolder() {
+async function getActiveParentFolder() {
   const filePath = getActiveFilePath();
+  
   if (!filePath) {
-    console.log("No active file path found."); // Debugging log
+    vscode.window.showWarningMessage("No active file path found."); // Debugging log
     return "";
   }
   
-  const parentFolder = filePath.replace(/\\/g, "/").split("/").slice(0, -1).join("/");
+  const parentFolder = (await filePath).replace(/\\/g, "/").split("/").slice(0, -1).join("/");
   if (!parentFolder) {
-    console.log("Could not determine the parent folder for path:", filePath); // Debugging log
+    vscode.window.showWarningMessage("Could not determine the parent folder for path:", await filePath); // Debugging log
   }
   return parentFolder;
 }
@@ -120,11 +136,11 @@ async function getFilesInCurrentRelativePath() {
     return [];
   }
 
-  const files = await fs.promises.readdir(folder);
+  const files = await fs.promises.readdir(await folder);
   const filteredFiles = [];
 
   for (const file of files) {
-    const uri = Uri.joinPath(Uri.file(folder), file);
+    const uri = Uri.joinPath(Uri.file(await folder), file);
     const stats = await fs.promises.lstat(uri.fsPath);
     if (stats.isFile() && file.endsWith(extension)) {
       filteredFiles.push(file);
@@ -138,28 +154,28 @@ function getActiveFileExtension() {
   const fileName = getActiveFileName();
   if (!fileName) {
     // Handle the case where fileName is undefined or empty
-    console.log("No active file or filename could be retrieved.");
+    vscode.window.showWarningMessage("No active file or filename could be retrieved.");
     return ""; // Return a default value or handle the error as appropriate
   }
 
   const lastDotIndex = fileName.lastIndexOf('.');
   if (lastDotIndex === -1) {
     // Handle the case where there is no dot in the filename
-    console.log("The file has no extension.");
+    vscode.window.showWarningMessage("The file has no extension.");
     return ""; // Return a default value or handle as needed
   }
 
   return fileName.slice(lastDotIndex);
 }
 
-function openFile(fileName: string) {
+async function openFile(fileName: string) {
   const activeParentFolder = getActiveParentFolder();
 
   if (!activeParentFolder) {
     return;
   }
 
-  const uri = Uri.joinPath(Uri.file(activeParentFolder), fileName);
+  const uri = Uri.joinPath(Uri.file(await activeParentFolder), fileName);
   vscode.window.showTextDocument(uri);
 }
 
