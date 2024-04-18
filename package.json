@@ -1,5 +1,5 @@
 {
-  "name": "file_type_navigator",
+  "name": "file-type-navigator",
   "displayName": "File Type Navigator",
   "description": "Quick navigation between the files in the directory relative to the current open file",
   "icon": "resources/logo.png",
