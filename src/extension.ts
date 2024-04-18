@@ -70,6 +70,7 @@ async function showFilesInRelativePath() {
       return;
     }
     cachedIndex = directoryFiles.findIndex((file) => file.label === selection.label);
+    cachedExtension = getFileExtension(selection.label);
     openFile(selection.label);
   });
 }
