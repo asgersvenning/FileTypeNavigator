@@ -95,6 +95,7 @@ function getActiveParentFolder() {
 
 async function getFilesInCurrentRelativePath() {
   const folder = getActiveParentFolder();
+  const extension = getActiveFileExtension();
 
   if (!folder) {
     vscode.window.showWarningMessage("Can't find parent folder.");
@@ -102,13 +103,22 @@ async function getFilesInCurrentRelativePath() {
   }
 
   const files = await fs.promises.readdir(folder);
+  const filteredFiles = [];
 
-  const activeParentFolder = getActiveParentFolder();
-  return files.filter(async (file) => {
-    const uri = Uri.joinPath(Uri.file(activeParentFolder), file);
+  for (const file of files) {
+    const uri = Uri.joinPath(Uri.file(folder), file);
     const stats = await fs.promises.lstat(uri.fsPath);
-    return stats.isFile();
-  });
+    if (stats.isFile() && file.endsWith(extension)) {
+      filteredFiles.push(file);
+    }
+  }
+
+  return filteredFiles;
+}
+
+function getActiveFileExtension() {
+  const fileName = getActiveFileName();
+  return fileName.slice(fileName.lastIndexOf('.'));
 }
 
 function openFile(fileName: string) {
@@ -122,5 +132,4 @@ function openFile(fileName: string) {
   vscode.window.showTextDocument(uri);
 }
 
-// this method is called when your extension is deactivated
 export function deactivate() {}
