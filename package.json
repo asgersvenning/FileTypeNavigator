@@ -15,41 +15,41 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:relative-path-navigation.showFilesInRelativePath",
-    "onCommand:relative-path-navigation.openNextFileInRelativePath",
-    "onCommand:relative-path-navigation.openPreviousFileInRelativePath"
+    "onCommand:file-type-navigation.showFilesInRelativePath",
+    "onCommand:file-type-navigation.openNextFileInRelativePath",
+    "onCommand:file-type-navigation.openPreviousFileInRelativePath"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "relative-path-navigation.showFilesInRelativePath",
+        "command": "file-type-navigation.showFilesInRelativePath",
         "title": "Show Files in relative path"
       },
       {
-        "command": "relative-path-navigation.openNextFileInRelativePath",
+        "command": "file-type-navigation.openNextFileInRelativePath",
         "title": "Open next file in relative path"
       },
       {
-        "command": "relative-path-navigation.openPreviousFileInRelativePath",
+        "command": "file-type-navigation.openPreviousFileInRelativePath",
         "title": "Open previous file in relative path"
       }
     ],
 	"keybindings": [
 		{
-			"command": "relative-path-navigation.showFilesInRelativePath",
+			"command": "file-type-navigation.showFilesInRelativePath",
 			"key": "ctrl+e",
-			"when": "editorTextFocus"
+			"when": "editorIsOpen"
 		},
 		{
-			"command": "relative-path-navigation.openNextFileInRelativePath",
+			"command": "file-type-navigation.openNextFileInRelativePath",
 			"key": "ctrl+[ArrowDown]",
-			"when": "editorTextFocus"
+			"when": "editorIsOpen"
 		},
 		{
-			"command": "relative-path-navigation.openPreviousFileInRelativePath",
+			"command": "file-type-navigation.openPreviousFileInRelativePath",
 			"key": "ctrl+[ArrowUp]",
-			"when": "editorTextFocus"
+			"when": "editorIsOpen"
 		}
 	]
   },
