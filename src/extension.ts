@@ -136,7 +136,20 @@ async function getFilesInCurrentRelativePath() {
 
 function getActiveFileExtension() {
   const fileName = getActiveFileName();
-  return fileName.slice(fileName.lastIndexOf('.'));
+  if (!fileName) {
+    // Handle the case where fileName is undefined or empty
+    console.log("No active file or filename could be retrieved.");
+    return ""; // Return a default value or handle the error as appropriate
+  }
+
+  const lastDotIndex = fileName.lastIndexOf('.');
+  if (lastDotIndex === -1) {
+    // Handle the case where there is no dot in the filename
+    console.log("The file has no extension.");
+    return ""; // Return a default value or handle as needed
+  }
+
+  return fileName.slice(lastDotIndex);
 }
 
 function openFile(fileName: string) {
