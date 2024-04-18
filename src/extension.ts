@@ -54,7 +54,7 @@ async function showFilesInRelativePath() {
   const activeFileName = fileBaseName(activeFilePath);
   let files = getFilesInDirectory(activeFilePath);
 
-  files = files.filter(async (file) => file !== await activeFileName);
+  files = files.filter(async (file) => file !== activeFileName);
 
   const directoryFiles: QuickPickItem[] = files.map((file) => ({
     label: file,
@@ -69,7 +69,7 @@ async function showFilesInRelativePath() {
     if (!selection) {
       return;
     }
-
+    cachedIndex = directoryFiles.findIndex((file) => file.label === selection.label);
     openFile(selection.label);
   });
 }
