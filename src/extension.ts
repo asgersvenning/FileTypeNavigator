@@ -82,15 +82,33 @@ async function openPreviousFileInRelativePath() {
 }
 
 function getActiveFilePath() {
-  return vscode.window.activeTextEditor?.document.uri.fsPath ?? "";
+  if (!vscode.window.activeTextEditor) {
+    vscode.window.showWarningMessage("No active editor.");
+    return "";
+  }
+  return vscode.window.activeTextEditor.document.uri.fsPath;
 }
 
 function getActiveFileName() {
-  return vscode.window.activeTextEditor?.document.fileName.replace(/\\/g, "/").split("/").at(-1) ?? "";
+  if (!vscode.window.activeTextEditor) {
+    vscode.window.showWarningMessage("No active editor.");
+    return "";
+  }
+  return vscode.window.activeTextEditor.document.fileName.replace(/\\/g, "/").split("/").at(-1);
 }
 
 function getActiveParentFolder() {
-  return getActiveFilePath().replace(/\\/g, "/").split("/").slice(0, -1).join("/");
+  const filePath = getActiveFilePath();
+  if (!filePath) {
+    console.log("No active file path found."); // Debugging log
+    return "";
+  }
+  
+  const parentFolder = filePath.replace(/\\/g, "/").split("/").slice(0, -1).join("/");
+  if (!parentFolder) {
+    console.log("Could not determine the parent folder for path:", filePath); // Debugging log
+  }
+  return parentFolder;
 }
 
 async function getFilesInCurrentRelativePath() {
